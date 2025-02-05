@@ -241,6 +241,7 @@ function SimulatorWidget(node) {
 
     function format(start, length) {
       var html = '';
+/*      
       var n;
 
       for (var x = 0; x < length; x++) {
@@ -254,6 +255,8 @@ function SimulatorWidget(node) {
         html += num2hex(memory.get(start + x));
         html += " ";
       }
+*/
+      html = (formatBASIC(start, length)).html);
       return html;
     }
 
@@ -267,6 +270,61 @@ function SimulatorWidget(node) {
     };
   }
 
+function formatBASIC(start, length) {
+  // Output HTML per visualizzazione hex dump
+  var html = '';
+  // Output per BASIC loader
+  var basic = '10 rem memory loader - start:' + start + ' length:' + length + '\n';
+  basic += '20 for i=0 to ' + (length-1) + '\n';
+  basic += '30 read d:poke ' + start + '+i,d\n';
+  basic += '40 next i\n';
+  basic += '50 print "done!"\n';
+  basic += '60 data ';
+  
+  var dataCount = 0;
+  var lineNumber = 60;
+  
+  // Genera sia hex dump che BASIC data statements
+  var n;
+  for (var x = 0; x < length; x++) {
+    // Gestione hex dump
+    if ((x & 15) === 0) {
+      if (x > 0) { 
+        html += "\n";
+      }
+      n = (start + x);
+      html += num2hex(((n >> 8) & 0xff));
+      html += num2hex((n & 0xff));
+      html += ": ";
+    }
+    
+    var value = memory.get(start + x);
+    html += num2hex(value);
+    html += " ";
+    
+    // Gestione BASIC data statements
+    basic += value;
+    dataCount++;
+    
+    // Aggiungi virgola se non è l'ultimo numero
+    if (x < length - 1) {
+      basic += ',';
+    }
+    
+    // Vai a nuova riga BASIC ogni 16 numeri
+    if (dataCount === 16 && x < length - 1) {
+      lineNumber += 10;
+      basic += '\n' + lineNumber + ' data ';
+      dataCount = 0;
+    }
+  }
+  
+  return {
+    hexDump: html,
+    basicLoader: basic
+  };
+}
+  
   function Simulator() {
     var regA = 0;
     var regX = 0;
