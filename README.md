@@ -11,4 +11,6 @@ You can launch the ML program using the SYS command suggested by the loader itse
 
 I also fixed a bug which always showed dump and disassembly starting from $0600: now they start from address specified in "* = $xxxx" directive.
 
+## Emulator memory map
 
+Memory locations $200 to $5ff map to the screen pixels (1024 of them). The screen is 32 x 32 pixels in size. Different values wil draw different colour pixels.
