@@ -241,7 +241,7 @@ function SimulatorWidget(node) {
 
     function format(start, length) {
       var html = '';
-/*      
+
       var n;
 
       for (var x = 0; x < length; x++) {
@@ -255,8 +255,8 @@ function SimulatorWidget(node) {
         html += num2hex(memory.get(start + x));
         html += " ";
       }
-*/
-      html = (formatBASIC(start, length)).html);
+
+      html = (formatBASIC(start, length)).html;
       return html;
     }
 
